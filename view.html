@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Star Wars - Express</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="jumbotron">
+      <h1>Entering Users!</h1>
+      <h3>A Great Resource for User Statistics!</h3>
+      <hr>
+      <a href="/add"><button class="btn btn-danger btn-lg"><span class="fa fa-plus"></span> Add New User</button></a>
+    </div>
+    <div class="row">
+
+      <div class="col-12">
+
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3><strong>User Search</strong></h3>
+          </div>
+          <div class="card-body">
+            <input type="text" id="user-search" class="form-control">
+            <br>
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-md" id="search-btn"><span class="fa fa-search"></span> Search Users</button>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3><strong>User Statistics</strong></h3>
+          </div>
+          <div class="card-body">
+            <h2 id="name">Max</h2>
+            <div id="stats">
+              <h3><strong>Last Name:</strong> <span id="lastName">Korenvaes</span></h3>
+              <h3><strong>Age:</strong> <span id="age">30</span></h3>
+              <h3><strong>Zip-Code:</strong> <span id="Zip-Code">75230</span></h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $("#search-btn").on("click", function() {
+      //this stores the text used on the form to search for specific user into the "searchedUser" variable  
+      var searchedUser = $("#user-search").val().trim();
+
+      // Using a RegEx Pattern to remove spaces from searchedUser
+      // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
+      searchedUser = searchedUser.replace(/\s+/g, "").toLowerCase();
+
+      $.get("/api/users/" + searchedUser, function(data) {
+        console.log(data);
+        if (data) {
+          $("#stats").show();
+          $("#name").text(data.firstName);
+          $("#lastName").text(data.lastName);
+          $("#age").text(data.age);
+          $("#Zip-Code").text(data.zipCode);
+        }
+        else {
+          $("#name").text("You are unable to display user because he/she was not found or any number of other errors.");
+          $("#stats").hide();
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
